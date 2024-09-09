@@ -1,23 +1,23 @@
 
 
 
-# 事前準備
+# 1.事前準備
 
-XのデベロッパーサイトでAPIキーやトークンなどの発行
+## 1-1.XのデベロッパーサイトでAPIキーやトークンなどの発行
 https://developer.x.com/en/portal/dashboard
 
-## コールバックURLの設定
+## 1-2.コールバックURLの設定
 ```
 https://script.google.com/macros/d/{スクリプトID}/usercallback
 ```
 
-# 使用方法
-## ライブラリの読み込み
+# 2.使用方法
+## 2-1.ライブラリの読み込み
 
 ```
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
 ```
-## XのAPIで使用する設定ファイルの作成
+## 2-2.XのAPIで使用する設定ファイルの作成・と必要情報の設定
 
 ```javascript
 const CLIENT_ID = 'XXXXXXXXXX';
@@ -47,4 +47,12 @@ function authCallback(request) {
         return HtmlService.createHtmlOutput('Denied.');
     }
 }
+```
+## 2-3.authを実行して認証
+
+```javascript
+function auth(){
+  SLOTH.main();
+}
+
 ```
