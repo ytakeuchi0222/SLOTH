@@ -5,7 +5,6 @@
 * 画像投稿：send_image_Tweet(image_url, content);
 * 動画投稿：send_video_Tweet(video_url, content);
 * ツリー投稿：tree_send_text_Tweet(tw_id, content);
-* 無料版の投稿上限は1500回/月(48回/日)まで
 */
 
 // ------------------------------------------------ユーザー設定
@@ -215,10 +214,6 @@ function send_image_Tweet(image_url, content) {
  * @return {number} ポストID
 */
 function send_video_Tweet(video_url, content) {
-    // 再生時間は0.5秒～140秒の間としてください
-    // フレームレートは60FPS以下としてください
-    // サイズは32x32～1280x1024の間としてください
-    // 動画のURL(例)https://cc3001.dmm.co.jp/litevideo/freepv/4/422/422base00035/422base00035_sm_s.mp4
     var twitterService = getService1();
     var sample_movie_url = video_url;
     if (twitterService.hasAccess()) {
@@ -360,5 +355,3 @@ function tree_send_text_Tweet(tw_id, content) {
     }
     return result.data.id;
 }
-
-

@@ -11,7 +11,7 @@ https://developer.x.com/en/portal/dashboard
 https://script.google.com/macros/d/{スクリプトID}/usercallback
 ```
 
-# 2.使用方法
+# 2.設定方法
 ## 2-1.ライブラリの読み込み
 
 ```
@@ -54,5 +54,29 @@ function authCallback(request) {
 function auth(){
   SLOTH.main();
 }
-
 ```
+
+# 使用方法
+## テキスト投稿
+```javascirpt
+SLOTH.send_text_Tweet(content);
+```
+## 画像投稿
+```javascirpt
+SLOTH.send_image_Tweet(image_url, content);
+```
+## 動画投稿
+```javascirpt
+SLOTH.send_video_Tweet(video_url, content);
+```
+## テキストでのツリー投稿
+```javascirpt
+SLOTH.tree_send_text_Tweet(tw_id, content);
+```
+
+# 注意事項
+* 無料版の投稿上限は1500回/月(48回/日)まで
+* 再生時間は0.5秒～140秒の間としてください
+* フレームレートは60FPS以下としてください
+* サイズは32x32～1280x1024の間としてください
+* 動画のURLはmp4形式で指定してください(例 https://xxx.co.jp//xxx/xxx.mp4)
