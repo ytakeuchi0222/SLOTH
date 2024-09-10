@@ -1,11 +1,10 @@
 
 /**
-* @title SLOTH
-* @description APIを使用したXへの投稿機能(テキスト、画像、動画、ツリー投稿に対応
-* @auther ytakeuchi
+* SLOTH
+* APIを使用したXへの投稿機能(テキスト、画像、動画、ツリー投稿に対応
 */
 
-// ------------------------------------------------ユーザー設定
+// ------------------------------------------------プロパティ周りの処理
 const UP = PropertiesService.getUserProperties();
 const CLIENT_ID = UP.getProperty('CLIENT_ID')
 const CLIENT_SECRET = UP.getProperty("CLIENT_SECRET")
@@ -31,10 +30,6 @@ function setting(data) {
         //Logger.log('キー: %s, 値: %s', key, data[key]);
         UP.setProperty(key, data[key]);
     }
-}
-//authorizationのリセット
-function reset() {
-    var service = getService(); service.reset();
 }
 // ------------------------------------------------Xの認証
 //OAuth2.0 Service
@@ -99,6 +94,10 @@ function main() {
         var authorizationUrl = service.getAuthorizationUrl();
         Logger.log('Open the following URL and re-run the script: %s', authorizationUrl);
     }
+}
+//authorizationのリセット
+function reset() {
+    var service = getService(); service.reset();
 }
 function authCallback(request) {
     var service = getService();
