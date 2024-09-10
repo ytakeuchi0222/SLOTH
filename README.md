@@ -17,36 +17,20 @@ https://script.google.com/macros/d/{スクリプトID}/usercallback
 ```
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
 ```
-## 2-2.XのAPIで使用する設定ファイルの作成・と必要情報の設定
+## スクリプトプロパティに値を設定
 
+* CLIENT_ID
+* CLIENT_SECRET
+* API_KEY
+* API_KEY_SECRET
+* ACCESS_TOKEN
+* ACCESS_TOKEN_SECRET
+* BearerTOKEN
+
+## 2-3.XのAPIで使用する設定ファイルの作成・と必要情報の設定
 ```javascript
-const CLIENT_ID = 'XXXXXXXXXX';
-const CLIENT_SECRET = 'XXXXXXXXXX';
-const API_KEY = 'XXXXXXXXXX';
-const API_KEY_SECRET = 'XXXXXXXXXX';
-const ACCESS_TOKEN = 'XXXXXXXXXX';
-const ACCESS_TOKEN_SECRET = 'XXXXXXXXXX';
-const BearerTOKEN = 'XXXXXXXXXX';
-
-//プロパティセット
-SLOTH.setUserProperty(CLIENT_ID,CLIENT_SECRET,API_KEY,API_KEY_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET,BearerTOKEN);
-
-//X認証
-function auth(){
-  SLOTH.main();
-}
-
-//X認証用のコールバック
-function authCallback(request) {
-    var service = SLOTH.getService();
-    var authorized = service.handleCallback(request);
-    if (authorized) {
-        return HtmlService.createHtmlOutput('Success!');
-    }
-    else {
-        return HtmlService.createHtmlOutput('Denied.');
-    }
-}
+const setting =()=>{const data = PropertiesService.getScriptProperties().getProperties();SLOTH.setting(data);SLOTH.main();}
+const authCallback=(request)=>{return SLOTH.authCallback(request);}
 ```
 ## 2-3.authを実行して認証
 
