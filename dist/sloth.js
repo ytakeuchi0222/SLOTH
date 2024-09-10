@@ -16,7 +16,16 @@ const API_KEY_SECRET = UP.getProperty("API_KEY_SECRET")
 const ACCESS_TOKEN = UP.getProperty("ACCESS_TOKEN")
 const ACCESS_TOKEN_SECRET = UP.getProperty("ACCESS_TOKEN_SECRET")
 const BearerTOKEN = UP.getProperty("BearerTOKEN")
-
+function authCallback(request){
+    var service = getService();
+    var authorized = service.handleCallback(request);
+    if (authorized) {
+        return HtmlService.createHtmlOutput('Success!');
+    }
+    else {
+        return HtmlService.createHtmlOutput('Denied.');
+    }
+}
 /**
  * 設定した全プロパティを確認する
  */
