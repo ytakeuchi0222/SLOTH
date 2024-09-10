@@ -116,7 +116,7 @@ function authCallback(request) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function send_text_Tweet(content) {
+function postText(content) {
     var payload = {
         text: content
     };
@@ -149,7 +149,7 @@ function send_text_Tweet(content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function send_image_Tweet(image_url, content) {
+function postImage(image_url, content) {
     // 画像のBlobデータを取得
     var imageBlob = UrlFetchApp.fetch(image_url).getBlob();
     // OAuth1.0 Service
@@ -211,7 +211,7 @@ function send_image_Tweet(image_url, content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function send_video_Tweet(video_url, content) {
+function psotVideo(video_url, content) {
     var twitterService = getService1();
     var sample_movie_url = video_url;
     if (twitterService.hasAccess()) {
@@ -325,7 +325,7 @@ function send_video_Tweet(video_url, content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function tree_send_text_Tweet(tw_id, content) {
+function postTree(tw_id, content) {
     var payload = {
         text: content,
         reply: {
