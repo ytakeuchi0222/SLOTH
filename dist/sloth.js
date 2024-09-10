@@ -1,14 +1,10 @@
 
 /**
-* SLOTH(APIを使用したXへの投稿機能)
-* テキスト投稿：send_text_Tweet(content);
-* 画像投稿：send_image_Tweet(image_url, content);
-* 動画投稿：send_video_Tweet(video_url, content);
-* ツリー投稿：tree_send_text_Tweet(tw_id, content);
-* 無料版の投稿上限は1500回/月(48回/日)まで
+* SLOTH
+* APIを使用したXへの投稿機能(テキスト、画像、動画、ツリー投稿に対応
 */
 
-// ------------------------------------------------ユーザー設定
+// ------------------------------------------------プロパティ周りの処理
 const UP = PropertiesService.getUserProperties();
 const CLIENT_ID = UP.getProperty('CLIENT_ID')
 const CLIENT_SECRET = UP.getProperty("CLIENT_SECRET")
@@ -17,37 +13,26 @@ const API_KEY_SECRET = UP.getProperty("API_KEY_SECRET")
 const ACCESS_TOKEN = UP.getProperty("ACCESS_TOKEN")
 const ACCESS_TOKEN_SECRET = UP.getProperty("ACCESS_TOKEN_SECRET")
 const BearerTOKEN = UP.getProperty("BearerTOKEN")
-
-//プロパティを設定する
-function setUserProperty(CLIENT_ID, CLIENT_SECRET, API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, BearerTOKEN) {
-    UP.setProperty('CLIENT_ID', CLIENT_ID);
-    UP.setProperty('CLIENT_SECRET', CLIENT_SECRET);
-    UP.setProperty('API_KEY', API_KEY);
-    UP.setProperty('API_KEY_SECRET', API_KEY_SECRET);
-    UP.setProperty('ACCESS_TOKEN', ACCESS_TOKEN);
-    UP.setProperty('ACCESS_TOKEN_SECRET', ACCESS_TOKEN_SECRET);
-    UP.setProperty('BearerTOKEN', BearerTOKEN);
-    Logger.log("プロパティ設定完了")
-}
-/**
- * 設定した全プロパティを取得する
- */
+//設定した全プロパティを確認する
 function propertiesCheck() {
     const data = UP.getProperties();
     for (var key in data) {
         Logger.log('キー: %s, 値: %s', key, data[key]);
     }
 }
-/**
- * authorizationのリセット
- */
-function reset() {
-    var service = getService(); service.reset();
+//設定した全プロパティを一括削除する
+function deleteAllProperties() {
+    UP.deleteAllProperties();
+}
+//プロパティを受け取って設定
+function setting(data) {
+    for (var key in data) {
+        //Logger.log('キー: %s, 値: %s', key, data[key]);
+        UP.setProperty(key, data[key]);
+    }
 }
 // ------------------------------------------------Xの認証
-/**
- * OAuth2.0 Service
- */
+//OAuth2.0 Service
 function getService() {
     pkceChallengeVerifier();
     var userProps = PropertiesService.getUserProperties();
@@ -68,9 +53,7 @@ function getService() {
             'Content-Type': 'application/x-www-form-urlencoded'
         });
 }
-/**
- * OAuth1.0 Service
- */
+//OAuth1.0 Service
 function getService1() {
     return OAuth1.createService("Twitter")
         .setAccessTokenUrl("https://api.twitter.com/oauth/access_token")
@@ -112,6 +95,20 @@ function main() {
         Logger.log('Open the following URL and re-run the script: %s', authorizationUrl);
     }
 }
+//authorizationのリセット
+function reset() {
+    var service = getService(); service.reset();
+}
+function authCallback(request) {
+    var service = getService();
+    var authorized = service.handleCallback(request);
+    if (authorized) {
+        return HtmlService.createHtmlOutput('Success!');
+    }
+    else {
+        return HtmlService.createHtmlOutput('Denied.');
+    }
+}
 // ------------------------------------------------投稿まわりの処理
 /**
  * テキストをポストする処理
@@ -119,7 +116,7 @@ function main() {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function send_text_Tweet(content) {
+function postText(content) {
     var payload = {
         text: content
     };
@@ -152,7 +149,7 @@ function send_text_Tweet(content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function send_image_Tweet(image_url, content) {
+function postImage(image_url, content) {
     // 画像のBlobデータを取得
     var imageBlob = UrlFetchApp.fetch(image_url).getBlob();
     // OAuth1.0 Service
@@ -214,11 +211,7 @@ function send_image_Tweet(image_url, content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function send_video_Tweet(video_url, content) {
-    // 再生時間は0.5秒～140秒の間としてください
-    // フレームレートは60FPS以下としてください
-    // サイズは32x32～1280x1024の間としてください
-    // 動画のURL(例)https://cc3001.dmm.co.jp/litevideo/freepv/4/422/422base00035/422base00035_sm_s.mp4
+function postVideo(video_url, content) {
     var twitterService = getService1();
     var sample_movie_url = video_url;
     if (twitterService.hasAccess()) {
@@ -332,7 +325,7 @@ function send_video_Tweet(video_url, content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function tree_send_text_Tweet(tw_id, content) {
+function postTree(tw_id, content) {
     var payload = {
         text: content,
         reply: {
@@ -360,5 +353,3 @@ function tree_send_text_Tweet(tw_id, content) {
     }
     return result.data.id;
 }
-
-

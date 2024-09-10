@@ -1,50 +1,54 @@
-
-
-
-# 事前準備
-
-XのデベロッパーサイトでAPIキーやトークンなどの発行
-https://developer.x.com/en/portal/dashboard
-
-## コールバックURLの設定
-```
-https://script.google.com/macros/d/{スクリプトID}/usercallback
-```
-
-# 使用方法
-## ライブラリの読み込み
+# 2.設定方法
+## GASでライブラリの読み込み
 
 ```
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
 ```
-## XのAPIで使用する設定ファイルの作成
+## GASでスクリプトプロパティに値を設定
 
-```javascript
-const CLIENT_ID = 'XXXXXXXXXX';
-const CLIENT_SECRET = 'XXXXXXXXXX';
-const API_KEY = 'XXXXXXXXXX';
-const API_KEY_SECRET = 'XXXXXXXXXX';
-const ACCESS_TOKEN = 'XXXXXXXXXX';
-const ACCESS_TOKEN_SECRET = 'XXXXXXXXXX';
-const BearerTOKEN = 'XXXXXXXXXX';
+* CLIENT_ID
+* CLIENT_SECRET
+* API_KEY
+* API_KEY_SECRET
+* ACCESS_TOKEN
+* ACCESS_TOKEN_SECRET
+* BearerTOKEN
 
-//プロパティセット
-SLOTH.setUserProperty(CLIENT_ID,CLIENT_SECRET,API_KEY,API_KEY_SECRET,ACCESS_TOKEN,ACCESS_TOKEN_SECRET,BearerTOKEN);
-
-//X認証
-function auth(){
-  SLOTH.main();
-}
-
-//X認証用のコールバック
-function authCallback(request) {
-    var service = SLOTH.getService();
-    var authorized = service.handleCallback(request);
-    if (authorized) {
-        return HtmlService.createHtmlOutput('Success!');
-    }
-    else {
-        return HtmlService.createHtmlOutput('Denied.');
-    }
-}
+## Xのアプリ側でコールバックURLの設定
 ```
+https://script.google.com/macros/d/{スクリプトID}/usercallback
+```
+
+## アプリ認証用のURL生成
+GASに下記2行を追加し、setting()を実行するとログに認証用のURLが表示されます
+```javascript
+const setting =()=>{const data = PropertiesService.getScriptProperties().getProperties();SLOTH.setting(data);SLOTH.main();}
+const authCallback=(request)=>{return SLOTH.authCallback(request);}
+```
+
+
+
+# ライブラリの主な使用方法
+## テキスト投稿
+```javascirpt
+SLOTH.send_text_Tweet(content);
+```
+## 画像投稿
+```javascirpt
+SLOTH.send_image_Tweet(image_url, content);
+```
+## 動画投稿
+```javascirpt
+SLOTH.send_video_Tweet(video_url, content);
+```
+## テキストでのツリー投稿
+```javascirpt
+SLOTH.tree_send_text_Tweet(tw_id, content);
+```
+
+# 注意事項
+* 無料版の投稿上限は1500回/月(48回/日)まで
+* 動画の再生時間は0.5秒～140秒の間
+* 動画のフレームレートは60FPS以下
+* 動画のサイズは32x32～1280x1024の間
+* 動画のURLはmp4形式で指定
