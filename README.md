@@ -1,23 +1,10 @@
-
-
-
-# 1.事前準備
-
-## 1-1.XのデベロッパーサイトでAPIキーやトークンなどの発行
-https://developer.x.com/en/portal/dashboard
-
-## 1-2.コールバックURLの設定
-```
-https://script.google.com/macros/d/{スクリプトID}/usercallback
-```
-
 # 2.設定方法
-## 2-1.ライブラリの読み込み
+## GASでライブラリの読み込み
 
 ```
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
 ```
-## スクリプトプロパティに値を設定
+## GASでスクリプトプロパティに値を設定
 
 * CLIENT_ID
 * CLIENT_SECRET
@@ -27,20 +14,21 @@ https://script.google.com/macros/d/{スクリプトID}/usercallback
 * ACCESS_TOKEN_SECRET
 * BearerTOKEN
 
-## 2-3.XのAPIで使用する設定ファイルの作成・と必要情報の設定
+## Xのアプリ側でコールバックURLの設定
+```
+https://script.google.com/macros/d/{スクリプトID}/usercallback
+```
+
+## アプリ認証用のURL生成
+GASに下記2行を追加し、setting()を実行するとログに認証用のURLが表示されます
 ```javascript
 const setting =()=>{const data = PropertiesService.getScriptProperties().getProperties();SLOTH.setting(data);SLOTH.main();}
 const authCallback=(request)=>{return SLOTH.authCallback(request);}
 ```
-## 2-3.authを実行して認証
 
-```javascript
-function auth(){
-  SLOTH.main();
-}
-```
 
-# 使用方法
+
+# ライブラリの主な使用方法
 ## テキスト投稿
 ```javascirpt
 SLOTH.send_text_Tweet(content);
