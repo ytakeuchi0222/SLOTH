@@ -211,7 +211,7 @@ function postImage(image_url, content) {
  * @param {string} content 投稿内容
  * @return {number} ポストID
 */
-function psotVideo(video_url, content) {
+function postVideo(video_url, content) {
     var twitterService = getService1();
     var sample_movie_url = video_url;
     if (twitterService.hasAccess()) {
