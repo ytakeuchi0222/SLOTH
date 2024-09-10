@@ -17,24 +17,28 @@ const ACCESS_TOKEN = UP.getProperty("ACCESS_TOKEN")
 const ACCESS_TOKEN_SECRET = UP.getProperty("ACCESS_TOKEN_SECRET")
 const BearerTOKEN = UP.getProperty("BearerTOKEN")
 
-//プロパティを設定する
-function setUserProperty(CLIENT_ID, CLIENT_SECRET, API_KEY, API_KEY_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET, BearerTOKEN) {
-    UP.setProperty('CLIENT_ID', CLIENT_ID);
-    UP.setProperty('CLIENT_SECRET', CLIENT_SECRET);
-    UP.setProperty('API_KEY', API_KEY);
-    UP.setProperty('API_KEY_SECRET', API_KEY_SECRET);
-    UP.setProperty('ACCESS_TOKEN', ACCESS_TOKEN);
-    UP.setProperty('ACCESS_TOKEN_SECRET', ACCESS_TOKEN_SECRET);
-    UP.setProperty('BearerTOKEN', BearerTOKEN);
-    Logger.log("プロパティ設定完了")
-}
 /**
- * 設定した全プロパティを取得する
+ * 設定した全プロパティを確認する
  */
 function propertiesCheck() {
     const data = UP.getProperties();
     for (var key in data) {
         Logger.log('キー: %s, 値: %s', key, data[key]);
+    }
+}
+/**
+ * 設定した全プロパティを一括削除する
+ */
+function deleteAllProperties() {
+    UP.deleteAllProperties();
+}
+/**
+ * プロパティを受け取って設定
+ */
+function setting(data) {
+    for (var key in data) {
+        //Logger.log('キー: %s, 値: %s', key, data[key]);
+        UP.setProperty(key, data[key]);
     }
 }
 /**
