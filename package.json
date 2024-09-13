@@ -1,0 +1,13 @@
+{
+  "name": "SLOTH",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ytakeuchi0222/SLOTH.git",
+  "author": "ytakeuchi <hello@ytakeuchi.jp>",
+  "license": "MIT",
+  "scripts": {
+    "push": "clasp push -A ~/.clasprc_lust.json",
+    "push:watch": "clasp push -A ~/.clasprc_lust.json --watch",
+    "open": "clasp open"
+  }
+}
