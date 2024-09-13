@@ -141,68 +141,7 @@ function postText(content) {
     }
     return result.data["id"];
 }
-/**
- * 画像をポストする処理
- * @function
- * @param {string} image_url 画像のURL
- * @param {string} content 投稿内容
- * @return {number} ポストID
-*/
-function postImage(image_url, content) {
-    // 画像のBlobデータを取得
-    var imageBlob = UrlFetchApp.fetch(image_url).getBlob();
-    // OAuth1.0 Service
-    var oauth1Service = getService1();
-    // 画像アップロードのURL
-    var uploadUrl = 'https://upload.twitter.com/1.1/media/upload.json';
-    // 画像アップロードのPayload
-    var payload = {
-        media_data: Utilities.base64Encode(imageBlob.getBytes())
-    };
-    // 画像アップロードのオプション
-    var options = {
-        method: 'POST',
-        payload: payload,
-        muteHttpExceptions: true
-    };
-    // 画像アップロードリクエスト
-    var response = oauth1Service.fetch(uploadUrl, options);
-    console.log(JSON.parse(response.getContentText()));
-    var mediaId = JSON.parse(response.getContentText()).media_id_string;
-    console.log('mediaId', mediaId);
-    // OAuth2.0認証情報 - getService() = v2
-    var oauth2Service = getService();
-    // 投稿のURL
-    var endpoint2 = 'https://api.twitter.com/2/tweets';
-    // 投稿のPayload
-    if (oauth2Service.hasAccess()) {
-        var tweetPayload = JSON.stringify({
-            'text': content,
-            'media': {
-                'media_ids': [mediaId]
-            }
-        });
-        // 投稿のオプション
-        var tweetOptions = {
-            method: 'POST',
-            headers: {
-                Authorization: 'Bearer ' + oauth2Service.getAccessToken(),
-                'Content-Type': 'application/json'
-            },
-            payload: tweetPayload,
-            muteHttpExceptions: true
-        };
-        // 投稿投稿リクエスト
-        var tweetResponse = UrlFetchApp.fetch(endpoint2, tweetOptions);
-        // レスポンスをログに出力
-        console.log(JSON.parse(tweetResponse.getContentText()));
-        console.log(JSON.parse(tweetResponse.getContentText()).data.id);
-        return JSON.parse(tweetResponse.getContentText()).data.id;
-    }
-    else {
-        return null;
-    }
-}
+
 /**
  * 動画をポストする処理
  * @function
@@ -352,41 +291,34 @@ function postTree(tw_id, content) {
     }
     return result.data.id;
 }
-//------------------------------------------------------------------------20240913追加------------------------------------------------------------------------
-//Todo：配列が5つ以上のパターンにも対応する
 /**
- * 画像を複数投稿する処理
+ * 画像をポストする処理(複数指定可能)
  * @function
- * @param {string[]} img_urals 画像のURL(4つまで)
+ * @param {string|array} image_url 画像のURL(複数指定する場合は配列で渡す)
  * @param {string} content 投稿内容
+ * @param {number} [re_id] ポストID(ツリー投稿処理用)
  * @return {number} ポストID
 */
-function postImages(img_urls, content) {
-    let mediaIds = [];
-    if(img_urls.length < 5){// 画像が4枚以下の場合は順番にエンコード→アップロードする。*2
-        for(var i = 0; i < img_urls.length; i++){
-        // 画像のBlobデータを取得
-        var imageBlob = UrlFetchApp.fetch(img_urls[i]).getBlob();
-        // OAuth1.0 Service
-        var oauth1Service = getService1();
-        // 画像アップロードのURL
-        var uploadUrl = 'https://upload.twitter.com/1.1/media/upload.json';
-        // 画像アップロードのPayload
-        var payload = {
-            media_data: Utilities.base64Encode(imageBlob.getBytes())
-        };
-        // 画像アップロードのオプション
-        var options = {
-            method: 'POST',
-            payload: payload,
-            muteHttpExceptions: true
-        };
-        // 画像アップロードリクエスト
-        var response = oauth1Service.fetch(uploadUrl, options);
-        console.log(JSON.parse(response.getContentText()));
-        mediaIds[i] = JSON.parse(response.getContentText()).media_id_string;
+function postImage(img_urls, content, re_id) {
+
+    let arrayFlg = Array.isArray(img_urls);
+    let mediaIds;
+    if (!arrayFlg) {//画像が配列ではなく一つだけの場合
+        mediaIds = getMediaId(img_urls);
+    } else {//配列で複数渡ってきていた場合
+        if (img_urls.length < 5) {// 画像が4枚以下の場合は順番にエンコード→アップロードする。*2
+            mediaIds = getMediaIds(img_urls);
+        } else {// 5枚以上ある時は分割して投稿。最初の投稿の返信(スレッド)になる。文章は同じ。*1
+            var img_urls_now = img_urls.splice(0, 4);
+            let tw_id;
+            if (re_id) {//re_idがある場合はツリーとして投稿する
+                tw_id = postImage(img_urls_now, content, re_id);
+            } else {
+                tw_id = postImage(img_urls_now, content);
+            }
+            tw_id = postImage(img_urls, content, tw_id);
+            return tw_id;
         }
-        console.log('mediaIds', mediaIds);
     }
     // OAuth2.0認証情報 - getService() = v2
     var oauth2Service = getService();
@@ -394,12 +326,24 @@ function postImages(img_urls, content) {
     var endpoint2 = 'https://api.twitter.com/2/tweets';
     // 投稿のPayload
     if (oauth2Service.hasAccess()) {
-        var tweetPayload = JSON.stringify({
-            'text': content,
-            'media': {
-                'media_ids': mediaIds
-            }
-        });
+        if (re_id) {
+            var tweetPayload = JSON.stringify({
+                'text': content,
+                reply: {
+                    "in_reply_to_tweet_id": re_id
+                },
+                'media': {
+                    'media_ids': mediaIds
+                }
+            });
+        } else {
+            var tweetPayload = JSON.stringify({
+                'text': content,
+                'media': {
+                    'media_ids': mediaIds
+                }
+            });
+        }
         // 投稿のオプション
         var tweetOptions = {
             method: 'POST',
@@ -420,4 +364,57 @@ function postImages(img_urls, content) {
     else {
         return null;
     }
+}
+//配列の時用
+function getMediaIds(img_urls) {
+    let mediaIds = [];
+    for (var i = 0; i < img_urls.length; i++) {
+        // 画像のBlobデータを取得
+        var imageBlob = UrlFetchApp.fetch(img_urls[i]).getBlob();
+        // OAuth1.0 Service
+        var oauth1Service = getService1();
+        // 画像アップロードのURL
+        var uploadUrl = 'https://upload.twitter.com/1.1/media/upload.json';
+        // 画像アップロードのPayload
+        var payload = {
+            media_data: Utilities.base64Encode(imageBlob.getBytes())
+        };
+        // 画像アップロードのオプション
+        var options = {
+            method: 'POST',
+            payload: payload,
+            muteHttpExceptions: true
+        };
+        // 画像アップロードリクエスト
+        var response = oauth1Service.fetch(uploadUrl, options);
+        console.log(JSON.parse(response.getContentText()));
+        mediaIds[i] = JSON.parse(response.getContentText()).media_id_string;
+    }
+    console.log('mediaIds', mediaIds);
+    return mediaIds;
+}
+//画像URLが一つだけの時用
+function getMediaId(img_url) {
+    // 画像のBlobデータを取得
+    var imageBlob = UrlFetchApp.fetch(img_url).getBlob();
+    // OAuth1.0 Service
+    var oauth1Service = getService1();
+    // 画像アップロードのURL
+    var uploadUrl = 'https://upload.twitter.com/1.1/media/upload.json';
+    // 画像アップロードのPayload
+    var payload = {
+        media_data: Utilities.base64Encode(imageBlob.getBytes())
+    };
+    // 画像アップロードのオプション
+    var options = {
+        method: 'POST',
+        payload: payload,
+        muteHttpExceptions: true
+    };
+    // 画像アップロードリクエスト
+    var response = oauth1Service.fetch(uploadUrl, options);
+    console.log(JSON.parse(response.getContentText()));
+    var mediaId = JSON.parse(response.getContentText()).media_id_string;
+    console.log('mediaId', mediaId);
+    return [mediaId];
 }
