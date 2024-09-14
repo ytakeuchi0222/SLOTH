@@ -113,16 +113,16 @@ function authCallback(request) {
  * テキストをポストする処理
  * @function
  * @param {string} content 投稿内容
- * @param {string} [tw_id] ポストID
+ * @param {string} [re_id] ポストID
  * @return {number} ポストID
 */
-function postText(content, tw_id) {
+function postText(content, re_id) {
     let payload;
-    if (tw_id) {
+    if (re_id) {
         payload = {
             text: content,
             reply: {
-                "in_reply_to_tweet_id": tw_id
+                "in_reply_to_tweet_id": re_id
             }
         };
     } else {
