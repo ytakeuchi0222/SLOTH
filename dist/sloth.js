@@ -162,7 +162,7 @@ function postText(content, re_id) {
  * @param {string} [re_id] ポストID
  * @return {number} ポストID
 */
-function postVideo(video_url, content, re_id) {
+function postVideo(content, video_url, re_id) {
     var twitterService = getService1();
     var sample_movie_url = video_url;
     if (twitterService.hasAccess()) {
@@ -289,7 +289,7 @@ function postVideo(video_url, content, re_id) {
  * @param {number} [re_id] ポストID(ツリー投稿処理用)
  * @return {number} ポストID
 */
-function postImage(img_urls, content, re_id) {
+function postImage(content, img_urls, re_id) {
 
     let arrayFlg = Array.isArray(img_urls);
     let mediaIds;
