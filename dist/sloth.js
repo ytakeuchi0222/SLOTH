@@ -113,16 +113,16 @@ function authCallback(request) {
  * テキストをポストする処理
  * @function
  * @param {string} content 投稿内容
- * @param {string} [tw_id] ポストID
+ * @param {string} [re_id] ポストID
  * @return {number} ポストID
 */
-function postText(content, tw_id) {
+function postText(content, re_id) {
     let payload;
-    if (tw_id) {
+    if (re_id) {
         payload = {
             text: content,
             reply: {
-                "in_reply_to_tweet_id": tw_id
+                "in_reply_to_tweet_id": re_id
             }
         };
     } else {
@@ -159,9 +159,10 @@ function postText(content, tw_id) {
  * @function
  * @param {string} video_url 動画のURL(.mp4)
  * @param {string} content 投稿内容
+ * @param {string} [re_id] ポストID
  * @return {number} ポストID
 */
-function postVideo(video_url, content) {
+function postVideo(video_url, content, re_id) {
     var twitterService = getService1();
     var sample_movie_url = video_url;
     if (twitterService.hasAccess()) {
@@ -237,15 +238,27 @@ function postVideo(video_url, content) {
                 else {
                     Utilities.sleep(movie_status["processing_info"]["check_after_secs"] + 1);
                 }
-            }
-            ;
-            // 動画投稿用パラメーター設定
-            var payload = {
-                'text': content,
-                'media': {
-                    'media_ids': [movie_init['media_id_string']]
-                }
             };
+            if (re_id) {
+                // 動画投稿用パラメーター設定
+                var payload = {
+                    'text': content,
+                    reply: {
+                        "in_reply_to_tweet_id": re_id
+                    },
+                    'media': {
+                        'media_ids': [movie_init['media_id_string']]
+                    }
+                };
+            } else {
+                // 動画投稿用パラメーター設定
+                var payload = {
+                    'text': content,
+                    'media': {
+                        'media_ids': [movie_init['media_id_string']]
+                    }
+                };
+            }
             var response = UrlFetchApp.fetch(endpoint2, {
                 method: 'POST',
                 'contentType': 'application/json',
