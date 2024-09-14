@@ -1,6 +1,13 @@
 # SLOTH
 xのAPIを使用して投稿するGASライブラリ
 
+## バージョン情報
+### V7 (2024/09/13)
+・画像を複数枚指定できるようになりました（4枚まで）
+### V8 (2024/09/14)
+・画像を複数枚指定できるようになりました
+・ツリー投稿で画像が指定できるようになりました
+
 ## 設定方法
 ### GASでライブラリの読み込み
 
@@ -44,9 +51,15 @@ SLOTH.postImage(image_url, content);
 ```javascirpt
 SLOTH.postVideo(video_url, content);
 ```
-### テキストでのツリー投稿
+### ツリー投稿
+上記の関数に元の投稿のidを渡すことで対応できます
+ex）テキストの場合
 ```javascirpt
-SLOTH.postTree(post_id, content);
+SLOTH.postText(content,post_id);
+```
+ex）画像の場合
+```javascirpt
+SLOTH.postImage(image_url, content);
 ```
 
 ## 注意事項
@@ -56,9 +69,3 @@ SLOTH.postTree(post_id, content);
 * 動画のサイズは32x32～1280x1024の間
 * 動画のURLはmp4形式で指定
 
-## バージョン情報
-### V7 (2024/09/13)
-・画像を複数枚指定できるようになりました（4枚まで）
-### V8 (2024/09/14)
-・画像を複数枚指定できるようになりました
-・ツリー投稿で画像が指定できるようになりました
