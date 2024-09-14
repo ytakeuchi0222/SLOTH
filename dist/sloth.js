@@ -113,12 +113,23 @@ function authCallback(request) {
  * テキストをポストする処理
  * @function
  * @param {string} content 投稿内容
+ * @param {string} [tw_id] ポストID
  * @return {number} ポストID
 */
-function postText(content) {
-    var payload = {
-        text: content
-    };
+function postText(content, tw_id) {
+    let payload;
+    if (tw_id) {
+        payload = {
+            text: content,
+            reply: {
+                "in_reply_to_tweet_id": tw_id
+            }
+        };
+    } else {
+        payload = {
+            text: content
+        };
+    }
     var service = getService();
     if (service.hasAccess()) {
         var url = "https://api.twitter.com/2/tweets";
@@ -141,6 +152,7 @@ function postText(content) {
     }
     return result.data["id"];
 }
+
 
 /**
  * 動画をポストする処理
@@ -255,41 +267,6 @@ function postVideo(video_url, content) {
     else {
         return null;
     }
-}
-/**
- * ツリー投稿する処理
- * @function
- * @param {number} tw_id ポストID
- * @param {string} content 投稿内容
- * @return {number} ポストID
-*/
-function postTree(tw_id, content) {
-    var payload = {
-        text: content,
-        reply: {
-            "in_reply_to_tweet_id": tw_id
-        }
-    };
-    var service = getService();
-    if (service.hasAccess()) {
-        var url = "https://api.twitter.com/2/tweets";
-        var response = UrlFetchApp.fetch(url, {
-            method: 'POST',
-            'contentType': 'application/json',
-            headers: {
-                Authorization: 'Bearer ' + service.getAccessToken()
-            },
-            muteHttpExceptions: true,
-            payload: JSON.stringify(payload)
-        });
-        var result = JSON.parse(response.getContentText());
-        Logger.log(JSON.stringify(result, null, 2));
-    }
-    else {
-        var authorizationUrl = service.getAuthorizationUrl();
-        Logger.log('Open the following URL and re-run the script: %s', authorizationUrl);
-    }
-    return result.data.id;
 }
 /**
  * 画像をポストする処理(複数指定可能)
