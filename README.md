@@ -56,6 +56,8 @@ Xの[Developer Portal](https://developer.twitter.com/en/portal/dashboard)でAPI�
 * ACCESS_TOKEN
 * ACCESS_TOKEN_SECRET
 * BearerTOKEN
+  
+![スクリプト設定画面](https://drive.google.com/uc?export=view&id=16065va-wU8_Vi6LTkaY8aihTqGd_6ihK)
 
 ### コールバックURLの設定
 
@@ -64,6 +66,8 @@ Xの[Developer Portal](https://developer.twitter.com/en/portal/dashboard)でAPI�
 ```text
 https://script.google.com/macros/d/{スクリプトID}/usercallback
 ```
+
+![コールバック設定画面](https://drive.google.com/uc?export=view&id=1Os_R390cV4rDRnshlB_L2W8j4nYZ3etr)
 
 ### アプリ認証用のURL生成
 
