@@ -42,7 +42,7 @@ let tree_id = SLOTH.postText("投稿したいテキスト",tw_id);//ツリー投
 
 ### GASでスクリプトプロパティに値を設定
 
-X DevelopersでAPIキーを取得し、下記プロパティ名でスクリプトプロパティに設定
+Xの[Developer Portal]("https://developer.twitter.com/en/portal/dashboard")でAPIキーを取得し、下記プロパティ名でスクリプトプロパティに設定
 
 * CLIENT_ID
 * CLIENT_SECRET
@@ -54,7 +54,7 @@ X DevelopersでAPIキーを取得し、下記プロパティ名でスクリプ�
 
 ### コールバックURLの設定
 
-X Developersの「User authentication settings」でコールバックURLを設定
+[Developer Portal]("https://developer.twitter.com/en/portal/dashboard")の「User authentication settings」でコールバックURLを設定
 
 ```text
 https://script.google.com/macros/d/{スクリプトID}/usercallback
@@ -69,7 +69,7 @@ const setting =()=>{const data = PropertiesService.getScriptProperties().getProp
 const authCallback=(request)=>{return SLOTH.authCallback(request);}
 ```
 
-ログに表示されたURLにアクセスしてアプリ認証
+ログに表示されたURLにアクセスしてアプリ認証すれば設定完了です！
 
 ## 注意事項
 
