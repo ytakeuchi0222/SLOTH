@@ -78,7 +78,16 @@ const setting =()=>{const data = PropertiesService.getScriptProperties().getProp
 const authCallback=(request)=>{return SLOTH.authCallback(request);}
 ```
 
-ログに表示されたURLにアクセスしてアプリ認証すれば設定完了です！
+ログに表示されたURLにアクセスするとアプリ認証画面に遷移します
+
+![アプリ認証画面](https://drive.google.com/uc?export=view&id=1zQ533B4XLFVKNjHuslE9dqcG-KcmgkSg)
+
+アプリにアクセスを許可ボタンを押して下記の画面になれば設定完了です
+
+![アプリ認証画面](https://drive.google.com/uc?export=view&id=1oHK7YGEDvRABW1_oLC8xZl__h2HxwmvV)
+
+
+
 
 ## 注意事項
 
