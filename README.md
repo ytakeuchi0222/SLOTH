@@ -36,13 +36,13 @@ let tree_id = SLOTH.postText("投稿したいテキスト",tw_id);//ツリー投
 
 ### GASでライブラリの読み込み
 
+下記スクリプトIDで検索してライブラリを読み込んでください
+
 ```text
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
 ```
 
-![ライブラリ読み込み画面](https://drive.google.com/uc?export=view&id=1wJ6YW2K9iCq8k2_xGYd4Cas6F1aBXfKB)<br>
-
-![ライブラリ読み込み画面](https://lh3.googleusercontent.com/d/1wJ6YW2K9iCq8k2_xGYd4Cas6F1aBXfKB)
+![ライブラリ読み込み画面](https://drive.google.com/uc?export=view&id=1wJ6YW2K9iCq8k2_xGYd4Cas6F1aBXfKB)
 
 
 ### GASでスクリプトプロパティに値を設定
