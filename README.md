@@ -80,7 +80,7 @@ const authCallback=(request)=>{return SLOTH.authCallback(request);}
 
 ログに表示されたURLにアクセスするとアプリ認証画面に遷移します
 
-![アプリ認証画面](https://drive.google.com/uc?export=view&id=1zQ533B4XLFVKNjHuslE9dqcG-KcmgkSg)
+![アプリ認証画面](https://drive.google.com/uc?export=view&id=1MBryf2qMUPW2NdWzBdndywD9x5zcA-As)
 
 「アプリにアクセスを許可」ボタンを押して下記の画面が表示されれば設定完了です
 
