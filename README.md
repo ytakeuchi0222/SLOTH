@@ -36,7 +36,7 @@ let tree_id = SLOTH.postText("投稿したいテキスト",tw_id);//ツリー投
 
 ### GASでライブラリの読み込み
 
-下記スクリプトIDで検索してライブラリを読み込んでください
+下記スクリプトIDで検索してライブラリを読み
 
 ```text
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
@@ -47,7 +47,7 @@ let tree_id = SLOTH.postText("投稿したいテキスト",tw_id);//ツリー投
 
 ### GASでスクリプトプロパティに値を設定
 
-Xの[Developer Portal](https://developer.twitter.com/en/portal/dashboard)でAPIキーを取得し、下記プロパティ名でスクリプトプロパティに設定
+Xの[Developer Portal](https://developer.twitter.com/en/portal/dashboard)で各種7つの値を取得し、下記プロパティ名でスクリプトプロパティに設定
 
 * CLIENT_ID
 * CLIENT_SECRET
@@ -82,12 +82,9 @@ const authCallback=(request)=>{return SLOTH.authCallback(request);}
 
 ![アプリ認証画面](https://drive.google.com/uc?export=view&id=1zQ533B4XLFVKNjHuslE9dqcG-KcmgkSg)
 
-アプリにアクセスを許可ボタンを押して下記の画面になれば設定完了です
+「アプリにアクセスを許可」ボタンを押して下記の画面が表示されれば設定完了です
 
 ![成功画面](https://drive.google.com/uc?export=view&id=1oHK7YGEDvRABW1_oLC8xZl__h2HxwmvV)
-
-
-
 
 ## 注意事項
 
