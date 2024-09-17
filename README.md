@@ -69,7 +69,7 @@ https://script.google.com/macros/d/{スクリプトID}/usercallback
 
 ![コールバック設定画面](https://drive.google.com/uc?export=view&id=1Os_R390cV4rDRnshlB_L2W8j4nYZ3etr)
 
-### アプリ認証用のURL生成
+### アプリ認証用のURL生成とアクセス許可
 
 GASに下記コードを追加し、`setting()`を実行するとログに認証用のURLが表示されます
 
