@@ -7,19 +7,19 @@ XのAPIを使用した投稿処理をサポートするGASライブラリです�
 
 ### テキスト投稿
 
-```javascirpt
+```javascript
 let tw_id = SLOTH.postText("投稿したいテキスト");
 ```
 
 ### 画像投稿
 
-```javascirpt
+```javascript
 let tw_id = SLOTH.postImage("投稿したいテキスト","投稿したい画像のURL");
 ```
 
 ### 動画投稿
 
-```javascirpt
+```javascript
 let tw_id = SLOTH.postVideo("投稿したいテキスト","投稿したい動画のURL");
 ```
 
@@ -27,7 +27,7 @@ let tw_id = SLOTH.postVideo("投稿したいテキスト","投稿したい動画
 
 引数の末尾に投稿元のポストidを加える事でツリー投稿に対応できます
 
-```javascirpt
+```javascript
 let tw_id = SLOTH.postImage("投稿したいテキスト","投稿したい画像のURL");//元となる投稿
 let tree_id = SLOTH.postText("投稿したいテキスト",tw_id);//ツリー投稿
 ```
@@ -36,13 +36,18 @@ let tree_id = SLOTH.postText("投稿したいテキスト",tw_id);//ツリー投
 
 ### GASでライブラリの読み込み
 
+下記スクリプトIDで検索してライブラリを読み
+
 ```text
 10-3mPLjKMCEfMJEPFroTPRYpBU6RDIlBPY0qDBIIF46w55emFpOYp4vf
 ```
 
+![ライブラリ読み込み画面](https://drive.google.com/uc?export=view&id=1wJ6YW2K9iCq8k2_xGYd4Cas6F1aBXfKB)
+
+
 ### GASでスクリプトプロパティに値を設定
 
-Xの[Developer Portal]("https://developer.twitter.com/en/portal/dashboard")でAPIキーを取得し、下記プロパティ名でスクリプトプロパティに設定
+Xの[Developer Portal](https://developer.twitter.com/en/portal/dashboard)で各種7つの値を取得し、下記プロパティ名でスクリプトプロパティに設定
 
 * CLIENT_ID
 * CLIENT_SECRET
@@ -51,16 +56,20 @@ Xの[Developer Portal]("https://developer.twitter.com/en/portal/dashboard")でAP
 * ACCESS_TOKEN
 * ACCESS_TOKEN_SECRET
 * BearerTOKEN
+  
+![スクリプト設定画面](https://drive.google.com/uc?export=view&id=16065va-wU8_Vi6LTkaY8aihTqGd_6ihK)
 
 ### コールバックURLの設定
 
-[Developer Portal]("https://developer.twitter.com/en/portal/dashboard")の「User authentication settings」でコールバックURLを設定
+[Developer Portal](https://developer.twitter.com/en/portal/dashboard)の「User authentication settings」でコールバックURLを設定
 
 ```text
 https://script.google.com/macros/d/{スクリプトID}/usercallback
 ```
 
-### アプリ認証用のURL生成
+![コールバック設定画面](https://drive.google.com/uc?export=view&id=1Os_R390cV4rDRnshlB_L2W8j4nYZ3etr)
+
+### アプリ認証用のURL生成とアクセス許可
 
 GASに下記コードを追加し、`setting()`を実行するとログに認証用のURLが表示されます
 
@@ -69,7 +78,13 @@ const setting =()=>{const data = PropertiesService.getScriptProperties().getProp
 const authCallback=(request)=>{return SLOTH.authCallback(request);}
 ```
 
-ログに表示されたURLにアクセスしてアプリ認証すれば設定完了です！
+ログに表示されたURLにアクセスするとアプリ認証画面に遷移します
+
+![アプリ認証画面](https://drive.google.com/uc?export=view&id=1MBryf2qMUPW2NdWzBdndywD9x5zcA-As)
+
+「アプリにアクセスを許可」ボタンを押して下記の画面が表示されれば設定完了です
+
+![成功画面](https://drive.google.com/uc?export=view&id=1oHK7YGEDvRABW1_oLC8xZl__h2HxwmvV)
 
 ## 注意事項
 
