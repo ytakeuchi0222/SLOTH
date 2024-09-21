@@ -342,11 +342,11 @@ function postImage(content, img_urls, re_id) {
             let tw_id;
             if (re_id) {
                 //re_idがある場合はツリーとして投稿する
-                tw_id = postImage(img_urls_now, content, re_id);
+                tw_id = postImage(content, img_urls_now, re_id);
             } else {
-                tw_id = postImage(img_urls_now, content);
+                tw_id = postImage(content, img_urls_now);
             }
-            tw_id = postImage(img_urls, content, tw_id);
+            tw_id = postImage(content, img_urls, tw_id);
             return tw_id;
         }
     }
