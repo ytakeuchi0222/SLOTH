@@ -2,18 +2,8 @@
  * SLOTH
  * APIを使用したXへの投稿機能(テキスト、画像、動画、ツリー投稿に対応
  */
- * SLOTH
- * APIを使用したXへの投稿機能(テキスト、画像、動画、ツリー投稿に対応
- */
 // ------------------------------------------------プロパティ周りの処理
 const UP = PropertiesService.getUserProperties();
-const CLIENT_ID = UP.getProperty("CLIENT_ID");
-const CLIENT_SECRET = UP.getProperty("CLIENT_SECRET");
-const API_KEY = UP.getProperty("API_KEY");
-const API_KEY_SECRET = UP.getProperty("API_KEY_SECRET");
-const ACCESS_TOKEN = UP.getProperty("ACCESS_TOKEN");
-const ACCESS_TOKEN_SECRET = UP.getProperty("ACCESS_TOKEN_SECRET");
-const BearerTOKEN = UP.getProperty("BearerTOKEN");
 const CLIENT_ID = UP.getProperty("CLIENT_ID");
 const CLIENT_SECRET = UP.getProperty("CLIENT_SECRET");
 const API_KEY = UP.getProperty("API_KEY");
@@ -76,7 +66,6 @@ function getService1() {
         .setConsumerSecret(API_KEY_SECRET)
         .setAccessToken(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
         .setCallbackFunction("authCallback"); // コールバック関数名
-        .setCallbackFunction("authCallback"); // コールバック関数名
 }
 function pkceChallengeVerifier() {
     let userProps = PropertiesService.getUserProperties();
@@ -129,9 +118,6 @@ function authCallback(request) {
         return HtmlService.createHtmlOutput("Success!");
     } else {
         return HtmlService.createHtmlOutput("Denied.");
-        return HtmlService.createHtmlOutput("Success!");
-    } else {
-        return HtmlService.createHtmlOutput("Denied.");
     }
 }
 // ------------------------------------------------投稿まわりの処理
@@ -141,7 +127,6 @@ function authCallback(request) {
  * @param {string} content 投稿内容
  * @param {string} [re_id] ポストID
  * @return {number} ポストID
- */
  */
 function postText(content, re_id) {
     let payload;
@@ -155,7 +140,6 @@ function postText(content, re_id) {
     } else {
         payload = {
             text: content,
-            text: content,
         };
     }
     let service = getService();
@@ -166,10 +150,8 @@ function postText(content, re_id) {
             contentType: "application/json",
             headers: {
                 Authorization: "Bearer " + service.getAccessToken(),
-                Authorization: "Bearer " + service.getAccessToken(),
             },
             muteHttpExceptions: true,
-            payload: JSON.stringify(payload),
             payload: JSON.stringify(payload),
         });
         Logger.log(response);
@@ -193,7 +175,6 @@ function postText(content, re_id) {
  * @param {string} content 投稿内容
  * @param {string} [re_id] ポストID
  * @return {number} ポストID
- */
  */
 function postVideo(content, video_url, re_id) {
     let twitterService = getService1();
@@ -293,21 +274,6 @@ function postVideo(content, video_url, re_id) {
                     Utilities.sleep(
                         movie_status["processing_info"]["check_after_secs"] + 1
                     );
-                } else if (
-                    movie_status["processing_info"]["state"] == "failed"
-                ) {
-                    sheet
-                        .getRange(i, 14)
-                        .setValue(
-                            movie_status["processing_info"]["error"]["message"]
-                        );
-                    throw new Error(
-                        movie_status["processing_info"]["error"]["message"]
-                    );
-                } else {
-                    Utilities.sleep(
-                        movie_status["processing_info"]["check_after_secs"] + 1
-                    );
                 }
             }
             let payload;
@@ -316,10 +282,6 @@ function postVideo(content, video_url, re_id) {
                 payload = {
                     text: content,
                     reply: {
-                        in_reply_to_tweet_id: re_id,
-                    },
-                    media: {
-                        media_ids: [movie_init["media_id_string"]],
                         in_reply_to_tweet_id: re_id,
                     },
                     media: {
@@ -340,10 +302,8 @@ function postVideo(content, video_url, re_id) {
                 contentType: "application/json",
                 headers: {
                     Authorization: "Bearer " + getService().getAccessToken(),
-                    Authorization: "Bearer " + getService().getAccessToken(),
                 },
                 muteHttpExceptions: true,
-                payload: JSON.stringify(payload),
                 payload: JSON.stringify(payload),
             });
             // 動画投稿結果の出力
@@ -351,10 +311,8 @@ function postVideo(content, video_url, re_id) {
             Logger.log(JSON.stringify(result, null, 2));
             return JSON.parse(response.getContentText()).data.id;
         } catch (e) {
-        } catch (e) {
             console.log(e);
         }
-    } else {
     } else {
         return null;
     }
@@ -367,19 +325,12 @@ function postVideo(content, video_url, re_id) {
  * @param {number} [re_id] ポストID(ツリー投稿処理用)
  * @return {number} ポストID
  */
- */
 function postImage(content, img_urls, re_id) {
     let arrayFlg = Array.isArray(img_urls);
     let mediaIds;
     if (!arrayFlg) {
         //画像が配列ではなく一つだけの場合
-    if (!arrayFlg) {
-        //画像が配列ではなく一つだけの場合
         mediaIds = getMediaId(img_urls);
-    } else {
-        //配列で複数渡ってきていた場合
-        if (img_urls.length < 5) {
-            // 画像が4枚以下の場合は順番にエンコード→アップロードする。*2
     } else {
         //配列で複数渡ってきていた場合
         if (img_urls.length < 5) {
@@ -414,10 +365,6 @@ function postImage(content, img_urls, re_id) {
                 },
                 media: {
                     media_ids: mediaIds,
-                    in_reply_to_tweet_id: re_id,
-                },
-                media: {
-                    media_ids: mediaIds,
                 },
             });
         } else {
@@ -434,11 +381,8 @@ function postImage(content, img_urls, re_id) {
             headers: {
                 Authorization: "Bearer " + oauth2Service.getAccessToken(),
                 "Content-Type": "application/json",
-                Authorization: "Bearer " + oauth2Service.getAccessToken(),
-                "Content-Type": "application/json",
             },
             payload: tweetPayload,
-            muteHttpExceptions: true,
             muteHttpExceptions: true,
         };
         // 投稿投稿リクエスト
@@ -447,7 +391,6 @@ function postImage(content, img_urls, re_id) {
         console.log(JSON.parse(tweetResponse.getContentText()));
         console.log(JSON.parse(tweetResponse.getContentText()).data.id);
         return JSON.parse(tweetResponse.getContentText()).data.id;
-    } else {
     } else {
         return null;
     }
@@ -478,7 +421,6 @@ function getMediaIds(img_urls) {
         mediaIds[i] = JSON.parse(response.getContentText()).media_id_string;
     }
     console.log("mediaIds", mediaIds);
-    console.log("mediaIds", mediaIds);
     return mediaIds;
 }
 //画像URLが一つだけの時用
@@ -498,7 +440,6 @@ function getMediaId(img_url) {
         method: "POST",
         payload: payload,
         muteHttpExceptions: true,
-        muteHttpExceptions: true,
     };
     // 画像アップロードリクエスト
     let response = oauth1Service.fetch(uploadUrl, options);
@@ -507,4 +448,3 @@ function getMediaId(img_url) {
     console.log("mediaId", mediaId);
     return [mediaId];
 }
-
